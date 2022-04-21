@@ -101,7 +101,7 @@ def inicializarExcel():
         worksheet.write(j+1, 5, promedios[j])
     workbook.close()
 
-def MostrarGrafico():
+def mostrarGrafico():
     excel=pd.read_excel('tp1.xlsx')
     excel.to_csv('tp1.csv', index=None, header=True)
     datos=pd.read_csv('tp1.csv',header=0)
@@ -157,4 +157,5 @@ for j in range(ciclos):
     for i in range( cant_cargas ) : cargarNuevaGeneracion() 
 
 inicializarExcel()
-MostrarGrafico()
+mostrarGrafico()
+#os.system('tp1.xlsx')
