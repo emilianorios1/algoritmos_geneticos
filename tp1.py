@@ -82,12 +82,10 @@ def cargarTablas():
         cromosomas_fitness.append(cromosomas_objetivo[i]/sum(cromosomas_objetivo))
 
 def inicializarExcel():
-    global worksheet,chart,workbook
     #Eliminamos archivo anterior para evitar errores
     os.popen('del tp1.xlsx') 
     workbook = xlsxwriter.Workbook('tp1.xlsx')
     worksheet = workbook.add_worksheet()
-    chart = workbook.add_chart({'type': 'line'})
     worksheet.write(0,0, 'Ciclo')
     worksheet.write(0,1, 'Mínimo')
     worksheet.write(0,2, 'Máximo')
@@ -160,4 +158,3 @@ for j in range(ciclos):
 
 inicializarExcel()
 MostrarGrafico()
-#os.system('tp1.xlsx')
