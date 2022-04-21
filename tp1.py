@@ -102,10 +102,8 @@ def inicializarExcel():
     workbook.close()
 
 def mostrarGrafico():
-    excel=pd.read_excel('tp1.xlsx')
-    excel.to_csv('tp1.csv', index=None, header=True)
-    datos=pd.read_csv('tp1.csv',header=0)
-    _, ax = plt.subplots()
+    datos=pd.read_excel('tp1.xlsx',header=0)
+    fig, ax = plt.subplots()
     ax.plot(datos['Mínimo'], label='Mínimo')
     ax.plot(datos['Máximo'], label='Máximo')
     ax.plot(datos['Promedio'], label='Promedio')
