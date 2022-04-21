@@ -5,10 +5,6 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 
-media = []
-maximos = []
-minimos = []
-
 coef = (2**30) - 1
 p_cross = 0.75
 p_mut = 0.05
