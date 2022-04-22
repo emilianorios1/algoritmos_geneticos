@@ -13,6 +13,7 @@ genes = 30
 ciclos = 20
 elitismo = False
 cant_elitismo = 2
+metodo_seleccion = 't' #'t' para torneo y 'r' para ruleta
 
 
 def objetivo(cromosoma):
@@ -38,6 +39,14 @@ def tirarRuleta():
         i         =  i+1 
     return cromosoma
 
+def hacerTorneo():
+    c1 = random.randrange(pob)
+    c2 = random.randrange(pob)
+    if cromosomas_fitness[c1] >= cromosomas_fitness[c2]:
+        return cromosomas_binario[c1]
+    else:
+        return cromosomas_binario[c2]
+
 
 def mutar(cromosoma): ##Si hay 1 pone 0 y si hay 1 pone 0
     u = random.randrange(genes) ##Según la documentación de la librería Random, un rango de 30 devolvería un número entre 0 y 29 inclusive.
@@ -49,8 +58,12 @@ def mutar(cromosoma): ##Si hay 1 pone 0 y si hay 1 pone 0
 
 
 def cargarNuevaGeneracion():
-    cromosoma1 = tirarRuleta()
-    cromosoma2 = tirarRuleta()
+    if(metodo_seleccion =='r') :
+        cromosoma1 = tirarRuleta()  
+        cromosoma2 = tirarRuleta()
+    else:
+        cromosoma1 = hacerTorneo()
+        cromosoma2 = hacerTorneo()
     ##Se produce crossover?
     if((random.uniform(0,1)) < p_cross):
         ## El primer hijo está formado por los primeros genes del primer padre y los últimos genes gen del segundo padre
