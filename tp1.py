@@ -11,7 +11,7 @@ p_mut = 0.05
 pob = 10
 genes = 30
 ciclos = 20
-elitismo = False
+elitismo = True
 cant_elitismo = 2
 metodo_seleccion = 't' #'t' para torneo y 'r' para ruleta
 
@@ -148,8 +148,11 @@ for j in range(ciclos):
 
     print("Generación ",j+1)
     print("  valor maximo     ", maximos[j])
+    print("  crom decimal max ", cromosomas_maximo_decimal[j])
+    print("  crom binario max ", cromosomas_maximo_binario[j])
     print("  valor minimo     ", minimos[j])
     print("  valor promedio   ", promedios[j])
+    
 
     ##CARGA NUEVA GENERACION
     nueva_generacion = []
