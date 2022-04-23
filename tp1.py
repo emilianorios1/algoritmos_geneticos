@@ -11,7 +11,7 @@ p_mut = 0.05
 pob = 10
 genes = 30
 ciclos = 20
-elitismo = True
+elitismo = False
 cant_elitismo = 2
 metodo_seleccion = 't' #'t' para torneo y 'r' para ruleta
 cant_torneo = 2
@@ -172,4 +172,3 @@ for j in range(ciclos):
 
 inicializarExcel()
 mostrarGrafico()
-#os.system('tp1.xlsx')
