@@ -109,8 +109,8 @@ def inicializarExcel():
         worksheet.write(j+1, 0, j+1)
         worksheet.write(j+1, 1, minimos[j])
         worksheet.write(j+1, 2, maximos[j])
-        worksheet.write(j+1, 3, cromosomas_maximo_binario[j])
-        worksheet.write(j+1, 4, cromosomas_maximo_decimal[j])
+        worksheet.write(j+1, 3, cromosomas_maximo_decimal[j])
+        worksheet.write(j+1, 4, cromosomas_maximo_binario[j])
         worksheet.write(j+1, 5, promedios[j])
     workbook.close()
 
