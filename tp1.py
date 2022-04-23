@@ -14,6 +14,7 @@ ciclos = 20
 elitismo = True
 cant_elitismo = 2
 metodo_seleccion = 't' #'t' para torneo y 'r' para ruleta
+cant_torneo = 2
 
 
 def objetivo(cromosoma):
@@ -38,14 +39,17 @@ def tirarRuleta():
         cromosoma =  cromosomas_binario[i]
         i         =  i+1 
     return cromosoma
-
+ ##Se escogen aleatoriamente un numero T de individuos de la poblacion, el que tiene mayor putuacion se reproduce, sustituyendo a su descendencia
+ ## al que tiene menor puntuacion 
 def hacerTorneo():
-    c1 = random.randrange(pob)
-    c2 = random.randrange(pob)
-    if cromosomas_fitness[c1] >= cromosomas_fitness[c2]:
-        return cromosomas_binario[c1]
-    else:
-        return cromosomas_binario[c2]
+    torneo_fitness = []
+    torneo_binario = []
+    for i in range(cant_torneo):
+        cromosoma_index = random.randrange(pob) 
+        torneo_fitness.append(cromosomas_fitness[cromosoma_index])
+        torneo_binario.append(cromosomas_binario[cromosoma_index])
+    return torneo_binario[numpy.argmax(torneo_fitness)]
+
 
 
 def mutar(cromosoma): ##Si hay 1 pone 0 y si hay 1 pone 0
