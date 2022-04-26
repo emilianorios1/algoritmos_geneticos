@@ -10,10 +10,10 @@ p_cross = 0.75
 p_mut = 0.05
 pob = 10
 genes = 30
-ciclos = 20
-elitismo = False
+ciclos = 100
+elitismo = True
 cant_elitismo = 2
-metodo_seleccion = 't' #'t' para torneo y 'r' para ruleta
+metodo_seleccion = 'r' #'t' para torneo y 'r' para ruleta
 cant_torneo = 2
 
 
@@ -102,15 +102,15 @@ def inicializarExcel():
     worksheet.write(0,0, 'Ciclo')
     worksheet.write(0,1, 'Mínimo')
     worksheet.write(0,2, 'Máximo')
-    worksheet.write(0,3, 'Cromosoma máximo decimal')
-    worksheet.write(0,4, 'Cromosoma máximo')
+    worksheet.write(0,3, 'Cromosoma máximo bin.')
+    worksheet.write(0,4, 'Cromosoma máximo dec.')
     worksheet.write(0,5, 'Promedio')
     for j in range(ciclos):
         worksheet.write(j+1, 0, j+1)
         worksheet.write(j+1, 1, minimos[j])
         worksheet.write(j+1, 2, maximos[j])
-        worksheet.write(j+1, 3, cromosomas_maximo_decimal[j])
-        worksheet.write(j+1, 4, cromosomas_maximo_binario[j])
+        worksheet.write(j+1, 3, cromosomas_maximo_binario[j])
+        worksheet.write(j+1, 4, cromosomas_maximo_decimal[j])
         worksheet.write(j+1, 5, promedios[j])
     workbook.close()
 
