@@ -8,4 +8,3 @@ Integrantes del grupo
   - Mateo Emilio
   - Nicolas Di Dio
   - Benjamín Jaime
-  - Gastón Kanjer
