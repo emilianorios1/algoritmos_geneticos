@@ -8,6 +8,11 @@ volumen_mochila = 4200
 #for i in range(len(valores)):
 #  division.append(volumenes[i] / valores[i])
 
+#Crea toda las combinaciones posibles, empieza con el arreglo vacío y uno por uno agrega elementos
+#una vez que se agrega un elemento se añade ese elemento a todas las combinaciones anteriores calculadas dandoles el valor r
+#y agregándole el proximo elemento
+#Ej: empieza en c=[[]] -> c=[[],[0]] -> c= [[],[0],[0, 1]] -> c= [[], [0], [0, 1], [2]] -> c= [[], [0], [0, 1], [2], [0,2]] 
+#                                                                                 ^ acá se suma [] + [2]
 
 def combinations():
   c = [[]]
