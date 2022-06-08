@@ -6,6 +6,5 @@ Integrantes del grupo
 
   - Emiliano Rios
   - Mateo Emilio
-  - Nicolas Di Dio
+  - Nicolás Di Dio
   - Benjamín Jaime
-  - Gastón Kanjer
