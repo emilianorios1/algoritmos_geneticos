@@ -25,8 +25,7 @@ for i in range(len(valores)):
 # c= [[], [0], [1],[0, 1], [2], [0,2]] -> 
 # c= [[], [0], [1],[0, 1], [2], [0,2], [1,2]]  -> 
 # c= [[], [0], [1],[0, 1], [2], [0,2], [1,2], [0,1,2]]  -> 
-#                                            //^ acá se suma [0,1] + [2]//                                                                            ^ acá se suma [] + [2]
-
+#                                            //^ acá se suma [0,1] + [2]//                                                                       
 def combinations(lista):
     comb = [[]]
     for x in lista:
