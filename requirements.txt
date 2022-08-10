@@ -1,0 +1,6 @@
+random
+numpy
+xlsxwriter
+os
+pandas
+matplotlib.pyplot 
