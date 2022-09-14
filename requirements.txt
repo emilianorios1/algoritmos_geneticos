@@ -1,6 +1,4 @@
-random
+matplotlib
 numpy
-xlsxwriter
-os
 pandas
-matplotlib.pyplot 
+XlsxWriter

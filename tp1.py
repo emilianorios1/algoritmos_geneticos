@@ -70,11 +70,11 @@ def cargarNuevaGeneracion():
         cromosoma2 = hacerTorneo()
     ##Se produce crossover?
     if((random.uniform(0,1)) < p_cross):
-        ## El primer hijo está formado por los primeros genes del primer padre y los últimos genes gen del segundo padre
-        ## El segundo hijo está formado por los primeros genes del segundo padre y los últimos genes gen del primer padre
+        # El primer hijo está formado por los primeros genes del primer padre y los últimos genes gen del segundo padre
+        # El segundo hijo está formado por los primeros genes del segundo padre y los últimos genes gen del primer padre
         rango = random.randrange(genes)
-        ##[:rango] devuelve todos los elementos antes del rango de corte mientras que [rango:] devuelve todos los elementos después del rango de corte
-        aux1 = cromosoma1[:rango] + cromosoma2[rango:] ##Para que no se pisen los valores al cargar el segundo cromosoma
+        # [:rango] devuelve todos los elementos antes del rango de corte mientras que [rango:] devuelve todos los elementos después del rango de corte
+        aux1 = cromosoma1[:rango] + cromosoma2[rango:]  #Para que no se pisen los valores al cargar el segundo cromosoma
         aux2 = cromosoma2[:rango] + cromosoma1[rango:]  
         cromosoma1 = aux1
         cromosoma2 = aux2
