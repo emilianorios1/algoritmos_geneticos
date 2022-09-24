@@ -9,7 +9,7 @@ cant_max_generadores = 25
 probabilidad_crossover = 0.8
 probabilidad_mutacion = 0.2
 cant_elitismo = 2
-elitismo = False
+elitismo = True
 cant_torneo = 2
 metodo_seleccion = 'ruleta'
 ciclos = 10
@@ -194,7 +194,7 @@ for i in range(ciclos):
         cargar_nueva_generacion()
 
 for i in range(ciclos):
-    print("generacion ", i)
+    print("generacion ", i+1)
     print("max parque: ", maximos_parque[i])
     print("cant aerogeneradores", np.sum(maximos_parque[i]))
     print("max objetivo: ", maximos_objetivo[i])
