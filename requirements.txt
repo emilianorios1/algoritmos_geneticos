@@ -3,4 +3,4 @@ numpy
 pandas
 XlsxWriter
 openpyxl
-cartopy
+folium
