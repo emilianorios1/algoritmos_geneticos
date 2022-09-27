@@ -1,14 +1,11 @@
-import os
-
 import numpy as np
 import pandas as pd
 import folium
-from folium.plugins import Search
 
 data = pd.read_excel('TablaCapitales.xlsx', header=0)
 ciudades = list(data)
 distancias = data.to_numpy()
-lat_lon = [[-34.6212767, -58.4145884],
+lat_lon = [[-34.6212767, -58.4145884],  # Mapeo manual de las latitudes y longitudes de cada provincia.
            [-31.3994342, -64.2643837],
            [-27.4862473, -58.8274061],
            [-26.1721517, -58.2299893],
@@ -68,15 +65,15 @@ def visitar_ciudad_mas_cerana(partida):
 
 # MENU
 
-# for i in range(len(ciudades)):
-#    print(i, " ", ciudades[i])
-# partida = int(input("Ingrese número de ciudad inicial: "))
-# print(ciudades[partida])
+for i in range(len(ciudades)):
+    print(i, " ", ciudades[i])
+partida = int(input("Ingrese número de ciudad inicial: "))
+print(ciudades[partida])
 
 ##
 
 
-partida = 0
+#partida = 0
 
 ciudades_visitadas = [partida]  # Creamos el arreglo ciudades_visitadas con partida como único elemento.
 
@@ -87,7 +84,7 @@ ciudades_visitadas.append(ciudades_visitadas[0])  # Se ingresa la ciudad inicial
 
 print("Recorrido: ")
 for i in ciudades_visitadas:
-    print(ciudades[i])
+    print("   ", ciudades[i])
 
 print("Distancia total recorrida: ", calcular_distancia_total())
 
