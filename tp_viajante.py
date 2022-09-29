@@ -3,7 +3,8 @@ import pandas as pd
 import folium
 import random
 
-modo = 'g'
+modo = 'h'
+menu = False
 data = pd.read_excel('TablaCapitales.xlsx', header=0)
 ciudades = list(data)
 distancias = data.to_numpy()
@@ -34,20 +35,6 @@ lat_lon = [[-34.6212767, -58.4145884],  # Mapeo manual de las latitudes y longit
            ]
 
 
-def combinations(lista):  # Usado para armar una búsqueda exhaustiva. Actualmente no utilizado.
-    comb = [[]]
-    cont = 0
-    for x in lista:
-        for r in comb:
-            comb = comb + [r + [x]]
-            cont = cont + 1
-            print(cont)
-    return comb
-
-
-# combinations(ciudades)
-
-
 def graficar_mapa(recorrido):
     m = folium.Map(location=[-34.603722, -58.381592], zoom_start=4)  # Inicializa el mapa en Argentina.
 
@@ -70,39 +57,60 @@ def calcular_distancia_total(recorrido):  # Es también la función objetivo en 
         acum += distancias[ciudad_origen][ciudad_destino]
     return acum
 
+def print_recorrido(recorrido):
+    print("Recorrido: ")
+    for i in recorrido:
+        print("   ", ciudades[i])
+    print("Distancia total recorrida: ", calcular_distancia_total(recorrido))
+
 
 ############ INICIO HEURISTICA
 if modo == 'h':
     # MENU
+    def heuristica(partida):
+        def visitar_ciudad_mas_cercana(partida):
+            ciudades_ordenadas_desde_partida = np.argsort(distancias[partida])
+            for final in ciudades_ordenadas_desde_partida:
+                if final not in ciudades_visitadas:
+                    ciudades_visitadas.append(final)
+                    return final
 
-    def visitar_ciudad_mas_cercana(partida):
-        ciudades_ordenadas_desde_partida = np.argsort(distancias[partida])
-        for final in ciudades_ordenadas_desde_partida:
-            if final not in ciudades_visitadas:
-                ciudades_visitadas.append(final)
-                return final
+        ciudades_visitadas = [partida]  # Creamos el arreglo ciudades_visitadas con partida como único elemento.
+
+        for i in range(len(ciudades)):
+            partida = visitar_ciudad_mas_cercana(partida)
+
+        ciudades_visitadas.append(ciudades_visitadas[0])  # Se ingresa la ciudad inicial al final de las visitadas
+
+        return ciudades_visitadas
+
+    if menu:
+        for i in range(len(ciudades)):
+            print(i, " ", ciudades[i])
+        partida = int(input("Ingrese número de ciudad inicial: "))
+        print(ciudades[partida])
+        recorrido_a = heuristica[partida]
+        graficar_mapa(recorrido_a)
+        print_recorrido(recorrido_a)
 
 
-    for i in range(len(ciudades)):
-        print(i, " ", ciudades[i])
-    partida = int(input("Ingrese número de ciudad inicial: "))
-    print(ciudades[partida])
+    if not menu:
 
-    ciudades_visitadas = [partida]  # Creamos el arreglo ciudades_visitadas con partida como único elemento.
+        minimo_distancia = 999999999
+        for i in range(len(ciudades)):
+            aux_recorrido = heuristica(i)
+            if minimo_distancia > calcular_distancia_total(aux_recorrido):
+                minimo_distancia = calcular_distancia_total(aux_recorrido)
+                recorrido_b = aux_recorrido
+        graficar_mapa(recorrido_b)
+        print_recorrido(recorrido_b)
 
-    for i in range(len(ciudades)):
-        partida = visitar_ciudad_mas_cercana(partida)
 
-    ciudades_visitadas.append(ciudades_visitadas[0])  # Se ingresa la ciudad inicial al final de las visitadas
 
-    print("Recorrido: ")
-    for i in ciudades_visitadas:
-        print("   ", ciudades[i])
-    print("Distancia total recorrida: ", calcular_distancia_total(ciudades_visitadas))
-
-    graficar_mapa(ciudades_visitadas)
 
 ############ FIN HEURISTICA
+
+
 
 ############ INICIO GENETICO
 
@@ -113,9 +121,8 @@ if modo == 'g':
     cant_elitismo = 2
     elitismo = True
     cant_torneo = 2
-    metodo_seleccion = 'ruleta'
     probabilidad_crossover = 0.8
-    probabilidad_mutacion = 0.2
+    probabilidad_mutacion = 0.5
 
 
     def ruleta():
@@ -131,51 +138,41 @@ if modo == 'g':
         return recorrido.copy()
 
 
-    def torneo():
-        torneo_fitness = []
-        torneo_binario = []
-        for i in range(cant_torneo):
-            recorrido_index = random.randrange(poblacion)
-            torneo_fitness.append(recorridos_fitness[recorrido_index])
-            torneo_binario.append(recorridos_actuales[recorrido_index])
-        return torneo_binario[np.argmax(torneo_fitness)].copy()
 
     def crossover(padre1, padre2):
         hijo = [99 for element in range(len(ciudades))]
         hijo[0] = padre1[0]
         indice_abajo = 0
-        for i in range(len(ciudades)):
+        while 0 == 0:
             valor = padre2[indice_abajo]
             indice_arriba = padre1.index(valor)
-            #if padre2[indice_arriba] == padre1[0]:
-            #    break
             if indice_arriba == 0:
                 break
             hijo[indice_arriba] = padre1[indice_arriba]
             indice_abajo = indice_arriba
-            #print(valor)
         for i in range(len(ciudades)):
             if hijo[i] == 99:
                 hijo[i] = padre2[i]
         return hijo.copy()
 
+    def mutar(recorrido):
+        g1 = random.randrange(len(recorrido))
+        g2 = random.randrange(len(recorrido))
+        recorrido[g1], recorrido[g2] = recorrido[g2], recorrido[g1]
+        return recorrido.copy()
 
 
     def cargar_nueva_generacion():
-        if metodo_seleccion == 'ruleta':
-            recorrido1 = ruleta()
-            recorrido2 = ruleta()
-        else:
-            recorrido1 = torneo()
-            recorrido2 = torneo()
+        recorrido1 = ruleta()
+        recorrido2 = ruleta()
         if random.uniform(0, 1) < probabilidad_crossover:
             aux_1 = crossover(recorrido1, recorrido2)
             aux_2 = crossover(recorrido2, recorrido1)
             recorrido1 = aux_1.copy()
             recorrido2 = aux_2.copy()
-        #if random.uniform(0, 1) < probabilidad_mutacion:
-            #recorrido1 = mutar(parque1)
-            #recorrido2 = mutar(parque2)
+        if random.uniform(0, 1) < probabilidad_mutacion:
+            recorrido1 = mutar(recorrido1)
+            recorrido2 = mutar(recorrido2)
         nueva_generacion.append(recorrido1)
         nueva_generacion.append(recorrido2)
 
@@ -192,13 +189,12 @@ if modo == 'g':
         nueva_generacion.append(random.sample(list(range(len(ciudades))), len(ciudades)))
     # FIN CARGA INICIAL
     for i in range(ciclos):
-        print(i)
     # CARGAMOS LA GENERACION NUEVA
         recorridos_actuales = nueva_generacion.copy()
         recorridos_objetivo = []
         recorridos_fitness = []
         for i in range(poblacion):
-            recorridos_objetivo.append(calcular_distancia_total(recorridos_actuales[i]))
+            recorridos_objetivo.append(1/calcular_distancia_total(recorridos_actuales[i]))
         for i in range(poblacion):
             recorridos_fitness.append(recorridos_objetivo[i] / sum(recorridos_objetivo))
     # FIN CARGA DE GENERACION NUEVA
@@ -219,4 +215,8 @@ if modo == 'g':
             cant_cargas = int(poblacion / 2)
         for i in range(cant_cargas):
             cargar_nueva_generacion()
+
+    for i in range(ciclos):
+        print(calcular_distancia_total(maximos_recorrido[i]))
+    graficar_mapa(maximos_recorrido[ciclos - 1])
 
