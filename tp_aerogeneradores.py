@@ -171,7 +171,7 @@ for i in range(poblacion):
     parques_nuevos.append(crear_parque_inicial())
 
 for i in range(ciclos):
-    parques_actuales = parques_nuevos
+    parques_actuales = parques_nuevos.copy()
     parques_objetivo = []
     parques_fitness = []
     cargar_tablas()
