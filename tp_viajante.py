@@ -4,7 +4,7 @@ import folium
 import random
 
 modo = 'h'
-menu = False
+menu = True
 data = pd.read_excel('TablaCapitales.xlsx', header=0)
 ciudades = list(data)
 distancias = data.to_numpy()
@@ -47,6 +47,7 @@ def graficar_mapa(recorrido):
     folium.PolyLine(locations=lat_lon_visitados, color='red').add_to(m)  # Genera las líneas del recorrido
 
     m.save("index.html")
+    print
 
 
 def calcular_distancia_total(recorrido):  # Es también la función objetivo en el algoritmo genético.
@@ -89,7 +90,7 @@ if modo == 'h':
             print(i, " ", ciudades[i])
         partida = int(input("Ingrese número de ciudad inicial: "))
         print(ciudades[partida])
-        recorrido_a = heuristica[partida]
+        recorrido_a = heuristica(partida)
         graficar_mapa(recorrido_a)
         print_recorrido(recorrido_a)
 
@@ -218,5 +219,6 @@ if modo == 'g':
 
     for i in range(ciclos):
         print(calcular_distancia_total(maximos_recorrido[i]))
+    print_recorrido(maximos_recorrido[ciclos - 1])
     graficar_mapa(maximos_recorrido[ciclos - 1])
 
