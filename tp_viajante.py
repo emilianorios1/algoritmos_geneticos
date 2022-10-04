@@ -4,7 +4,7 @@ import folium
 import random
 
 modo = 'h'
-menu = True
+menu = False
 data = pd.read_excel('TablaCapitales.xlsx', header=0)
 ciudades = list(data)
 distancias = data.to_numpy()
@@ -44,10 +44,10 @@ def graficar_mapa(recorrido):
     lat_lon_visitados = []
     for i in recorrido:  # Genera una lista con las latitudes y longitudes en el orden que se visitaron.
         lat_lon_visitados.append(lat_lon[i])
+    lat_lon_visitados.append(lat_lon[recorrido[0]])
     folium.PolyLine(locations=lat_lon_visitados, color='red').add_to(m)  # Genera las líneas del recorrido
 
     m.save("index.html")
-    print
 
 
 def calcular_distancia_total(recorrido):  # Es también la función objetivo en el algoritmo genético.
@@ -56,13 +56,17 @@ def calcular_distancia_total(recorrido):  # Es también la función objetivo en 
         ciudad_origen = recorrido[i]
         ciudad_destino = recorrido[i + 1]
         acum += distancias[ciudad_origen][ciudad_destino]
+    ciudad_origen = recorrido[-1]  # Es el ultimo elemento
+    ciudad_destino = recorrido[0]  # Es el primer elemento
+    acum += distancias[ciudad_origen][ciudad_destino]
     return acum
 
 def print_recorrido(recorrido):
+    print("Distancia reocorrida: ", calcular_distancia_total(recorrido))
     print("Recorrido: ")
     for i in recorrido:
         print("   ", ciudades[i])
-    print("Distancia total recorrida: ", calcular_distancia_total(recorrido))
+    print("   ", ciudades[recorrido[0]])
 
 
 ############ INICIO HEURISTICA
@@ -81,8 +85,6 @@ if modo == 'h':
         for i in range(len(ciudades)):
             partida = visitar_ciudad_mas_cercana(partida)
 
-        ciudades_visitadas.append(ciudades_visitadas[0])  # Se ingresa la ciudad inicial al final de las visitadas
-
         return ciudades_visitadas
 
     if menu:
@@ -90,21 +92,19 @@ if modo == 'h':
             print(i, " ", ciudades[i])
         partida = int(input("Ingrese número de ciudad inicial: "))
         print(ciudades[partida])
-        recorrido_a = heuristica(partida)
-        graficar_mapa(recorrido_a)
-        print_recorrido(recorrido_a)
+        recorrido_heuristico = heuristica(partida)
 
 
     if not menu:
-
         minimo_distancia = 999999999
         for i in range(len(ciudades)):
             aux_recorrido = heuristica(i)
             if minimo_distancia > calcular_distancia_total(aux_recorrido):
                 minimo_distancia = calcular_distancia_total(aux_recorrido)
-                recorrido_b = aux_recorrido
-        graficar_mapa(recorrido_b)
-        print_recorrido(recorrido_b)
+                recorrido_heuristico = aux_recorrido
+
+    graficar_mapa(recorrido_heuristico)
+    print_recorrido(recorrido_heuristico)
 
 
 
@@ -123,7 +123,7 @@ if modo == 'g':
     elitismo = True
     cant_torneo = 2
     probabilidad_crossover = 0.8
-    probabilidad_mutacion = 0.5
+    probabilidad_mutacion = 0.2
 
 
     def ruleta():
@@ -182,9 +182,6 @@ if modo == 'g':
     # DECLARACIÓN DE ARREGLOS
     nueva_generacion = []
     maximos_recorrido = []
-    maximos_objetivo = []
-    minimos_objetivo = []
-    promedios_objetivo = []
     # CARGA INICIAL
     for i in range(poblacion):
         nueva_generacion.append(random.sample(list(range(len(ciudades))), len(ciudades)))
@@ -201,9 +198,6 @@ if modo == 'g':
     # FIN CARGA DE GENERACION NUEVA
 
         maximos_recorrido.append(recorridos_actuales[np.argmax(recorridos_objetivo)])
-        maximos_objetivo.append(np.max(recorridos_objetivo))
-        minimos_objetivo.append(np.min(recorridos_objetivo))
-        promedios_objetivo.append(np.average(recorridos_objetivo))
 
         nueva_generacion = []
         if elitismo:
@@ -217,8 +211,8 @@ if modo == 'g':
         for i in range(cant_cargas):
             cargar_nueva_generacion()
 
-    for i in range(ciclos):
-        print(calcular_distancia_total(maximos_recorrido[i]))
+    print("Recorrido número: ", ciclos)
+    print("Distancia reocorrida: ", calcular_distancia_total(maximos_recorrido[ciclos-1]))
     print_recorrido(maximos_recorrido[ciclos - 1])
     graficar_mapa(maximos_recorrido[ciclos - 1])
 
