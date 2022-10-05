@@ -3,7 +3,6 @@ import pandas as pd
 import folium
 import random
 
-
 print("1 - Heuristica - Elegir partida ")
 print("2 - Heuristica - Mejor recorrido")
 print("3 - Genetico")
@@ -65,6 +64,7 @@ def calcular_distancia_total(recorrido):  # Es también la función objetivo en 
     acum += distancias[ciudad_origen][ciudad_destino]
     return acum
 
+
 def print_recorrido(recorrido):
     print("Distancia reocorrida: ", calcular_distancia_total(recorrido))
     print("Recorrido: ")
@@ -91,13 +91,13 @@ if modo == 1 or modo == 2:
 
         return ciudades_visitadas
 
+
     if modo == 1:
         for i in range(len(ciudades)):
             print(i, " ", ciudades[i])
         partida = int(input("Ingrese número de ciudad inicial: "))
         print(ciudades[partida])
         recorrido_heuristico = heuristica(partida)
-
 
     if modo == 2:
         minimo_distancia = 999999999
@@ -111,7 +111,6 @@ if modo == 1 or modo == 2:
     print_recorrido(recorrido_heuristico)
 
 ############ FIN HEURISTICA
-
 
 
 ############ INICIO GENETICO
@@ -140,7 +139,6 @@ if modo == 3:
         return recorrido.copy()
 
 
-
     def crossover(padre1, padre2):
         hijo = [99 for element in range(len(ciudades))]
         hijo[0] = padre1[0]
@@ -156,6 +154,7 @@ if modo == 3:
             if hijo[i] == 99:
                 hijo[i] = padre2[i]
         return hijo.copy()
+
 
     def mutar(recorrido):
         g1 = random.randrange(len(recorrido))
@@ -187,15 +186,15 @@ if modo == 3:
         nueva_generacion.append(random.sample(list(range(len(ciudades))), len(ciudades)))
     # FIN CARGA INICIAL
     for i in range(ciclos):
-    # CARGAMOS LA GENERACION NUEVA
+        # CARGAMOS LA GENERACION NUEVA
         recorridos_actuales = nueva_generacion.copy()
         recorridos_objetivo = []
         recorridos_fitness = []
         for i in range(poblacion):
-            recorridos_objetivo.append(1/calcular_distancia_total(recorridos_actuales[i]))
+            recorridos_objetivo.append(1 / calcular_distancia_total(recorridos_actuales[i]))
         for i in range(poblacion):
             recorridos_fitness.append(recorridos_objetivo[i] / sum(recorridos_objetivo))
-    # FIN CARGA DE GENERACION NUEVA
+        # FIN CARGA DE GENERACION NUEVA
 
         maximos_recorrido.append(recorridos_actuales[np.argmax(recorridos_objetivo)])
 
@@ -204,7 +203,8 @@ if modo == 3:
             # Se cargan los cromosomas que pasan por elitismo, según su fitness se consigue su índice en la lista,
             # a partir de eso se busca en el binario
             for i in range(cant_elitismo):
-                nueva_generacion.append(recorridos_actuales[recorridos_fitness.index(sorted(recorridos_fitness, reverse=True)[i])])
+                nueva_generacion.append(
+                    recorridos_actuales[recorridos_fitness.index(sorted(recorridos_fitness, reverse=True)[i])])
             cant_cargas = int((poblacion - cant_elitismo) / 2)
         else:
             cant_cargas = int(poblacion / 2)
@@ -214,4 +214,3 @@ if modo == 3:
     print("Recorrido número: ", ciclos)
     print_recorrido(maximos_recorrido[ciclos - 1])
     graficar_mapa(maximos_recorrido[ciclos - 1])
-
