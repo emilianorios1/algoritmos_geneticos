@@ -3,8 +3,12 @@ import pandas as pd
 import folium
 import random
 
-modo = 'h'
-menu = False
+
+print("1 - Heuristica - Elegir partida ")
+print("2 - Heuristica - Mejor recorrido")
+print("3 - Genetico")
+modo = int(input("Ingrese selección: "))
+
 data = pd.read_excel('TablaCapitales.xlsx', header=0)
 ciudades = list(data)
 distancias = data.to_numpy()
@@ -70,7 +74,7 @@ def print_recorrido(recorrido):
 
 
 ############ INICIO HEURISTICA
-if modo == 'h':
+if modo == 1 or modo == 2:
     # MENU
     def heuristica(partida):
         def visitar_ciudad_mas_cercana(partida):
@@ -87,7 +91,7 @@ if modo == 'h':
 
         return ciudades_visitadas
 
-    if menu:
+    if modo == 1:
         for i in range(len(ciudades)):
             print(i, " ", ciudades[i])
         partida = int(input("Ingrese número de ciudad inicial: "))
@@ -95,7 +99,7 @@ if modo == 'h':
         recorrido_heuristico = heuristica(partida)
 
 
-    if not menu:
+    if modo == 2:
         minimo_distancia = 999999999
         for i in range(len(ciudades)):
             aux_recorrido = heuristica(i)
@@ -106,16 +110,13 @@ if modo == 'h':
     graficar_mapa(recorrido_heuristico)
     print_recorrido(recorrido_heuristico)
 
-
-
-
 ############ FIN HEURISTICA
 
 
 
 ############ INICIO GENETICO
 
-if modo == 'g':
+if modo == 3:
 
     poblacion = 50
     ciclos = 200
@@ -178,7 +179,6 @@ if modo == 'g':
         nueva_generacion.append(recorrido2)
 
 
-
     # DECLARACIÓN DE ARREGLOS
     nueva_generacion = []
     maximos_recorrido = []
@@ -212,7 +212,6 @@ if modo == 'g':
             cargar_nueva_generacion()
 
     print("Recorrido número: ", ciclos)
-    print("Distancia reocorrida: ", calcular_distancia_total(maximos_recorrido[ciclos-1]))
     print_recorrido(maximos_recorrido[ciclos - 1])
     graficar_mapa(maximos_recorrido[ciclos - 1])
 
